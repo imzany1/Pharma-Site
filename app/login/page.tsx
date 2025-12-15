@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { signIn } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Mail, Lock, LogIn, AlertCircle } from "lucide-react"
@@ -14,7 +14,9 @@ export default function LoginPage() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { mergeGuestCart } = useCart()
+  const callbackUrl = searchParams.get("callbackUrl") || "/"
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -37,7 +39,9 @@ export default function LoginPage() {
       // Merge guest cart after successful login
       await mergeGuestCart()
       
-      router.push("/")
+      // Prevent open redirect vulnerability
+      const safeCallbackUrl = callbackUrl.startsWith("/") ? callbackUrl : "/"
+      router.push(safeCallbackUrl)
       router.refresh()
     } catch {
       setError("Something went wrong. Please try again.")
