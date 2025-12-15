@@ -1,26 +1,87 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  
+  --color-border: var(--border);
+  
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
+:root {
+  /* Premium Light Theme (Medical/Clean) */
+  --background: #ffffff;
+  --foreground: #0f172a; /* Slate 900 */
+  
+  /* Primary: Trustworthy Deep Blue */
+  --primary: #0284c7; /* Sky 600 */
+  --primary-foreground: #ffffff;
+  
+  /* Secondary: Growth/Health Teal */
+  --secondary: #0d9488; /* Teal 600 */
+  --secondary-foreground: #ffffff;
+  
+  /* Accent: Subtle highlights */
+  --accent: #f0f9ff; /* Sky 50 */
+  --accent-foreground: #0284c7;
+  
+  /* Muted: For secondary text/backgrounds */
+  --muted: #f1f5f9; /* Slate 100 */
+  --muted-foreground: #64748b; /* Slate 500 */
+  
+  /* Cards */
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  
+  /* Borders */
+  --border: #e2e8f0; /* Slate 200 */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Premium Dark Theme */
+    --background: #0f172a; /* Slate 900 */
+    --foreground: #f8fafc; /* Slate 50 */
+    
+    --primary: #38bdf8; /* Sky 400 */
+    --primary-foreground: #0f172a;
+    
+    --secondary: #2dd4bf; /* Teal 400 */
+    --secondary-foreground: #0f172a;
+    
+    --accent: #1e293b; /* Slate 800 */
+    --accent-foreground: #38bdf8;
+    
+    --muted: #1e293b; /* Slate 800 */
+    --muted-foreground: #94a3b8; /* Slate 400 */
+    
+    --card: #1e293b;
+    --card-foreground: #f8fafc;
+    
+    --border: #334155; /* Slate 700 */
   }
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
