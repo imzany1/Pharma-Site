@@ -53,7 +53,7 @@ export default function Home() {
               Leading the future of medicine
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-foreground">
+            <h1 className="text-5xl md:text-7xl 2xl:text-8xl font-bold tracking-tight text-foreground">
               Innovating for a <br />
               <span className="text-primary">
                 Healthier Tomorrow
