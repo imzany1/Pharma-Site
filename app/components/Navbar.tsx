@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Menu, X, Pill, ShoppingCart, User, LogOut } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
@@ -20,6 +21,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const { data: session, status } = useSession()
   const { totalItems } = useCart()
+  const pathname = usePathname()
 
   // Handle scroll effect
   useEffect(() => {
@@ -49,23 +51,29 @@ export function Navbar() {
           <div className="bg-primary/10 p-2 rounded-xl group-hover:bg-primary/20 transition-colors">
             <Pill className="w-6 h-6 text-primary" />
           </div>
-          <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+          <span className="text-xl font-bold text-foreground">
             PharmaCorp
           </span>
         </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors relative group"
-            >
-              {link.name}
-              <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={cn(
+                  "text-sm font-medium transition-colors relative group",
+                  isActive ? "text-primary" : "text-muted-foreground hover:text-primary"
+                )}
+              >
+                {link.name}
+                <span className="absolute inset-x-0 -bottom-1 h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left dark:opacity-0" />
+              </Link>
+            )
+          })}
           
           {/* Cart Icon */}
           <Link href="/cart" className="relative p-2 hover:bg-accent rounded-lg transition-colors">

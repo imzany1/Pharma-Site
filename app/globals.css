@@ -26,56 +26,62 @@
 }
 
 :root {
-  /* Premium Light Theme (Medical/Clean) */
-  --background: #ffffff;
-  --foreground: #0f172a; /* Slate 900 */
+  /* Luxury Pharmaceutical Theme - Light Mode */
+  --background: #ffffff;      /* Pure white - maximum luxury */
+  --foreground: #000000;      /* Absolute black - crisp text */
   
-  /* Primary: Trustworthy Deep Blue */
-  --primary: #0284c7; /* Sky 600 */
+  /* Primary: Premium Medical Blue */
+  --primary: #0066CC;         /* Rich, saturated blue */
   --primary-foreground: #ffffff;
   
-  /* Secondary: Growth/Health Teal */
-  --secondary: #0d9488; /* Teal 600 */
-  --secondary-foreground: #ffffff;
+  /* Secondary: Refined Accent */
+  --secondary: #f5f5f5;       /* Near-white for subtle surfaces */
+  --secondary-foreground: #000000;
   
-  /* Accent: Subtle highlights */
-  --accent: #f0f9ff; /* Sky 50 */
-  --accent-foreground: #0284c7;
+  /* Accent: Interactive Highlight */
+  --accent: #f0f7ff;          /* Whisper of blue */
+  --accent-foreground: #0066CC;
   
-  /* Muted: For secondary text/backgrounds */
-  --muted: #f1f5f9; /* Slate 100 */
-  --muted-foreground: #64748b; /* Slate 500 */
+  /* Muted: Sophisticated Gray */
+  --muted: #fafafa;           /* Almost white */
+  --muted-foreground: #666666; /* Medium gray for hierarchy */
   
-  /* Cards */
+  /* Cards: Elevated Surfaces */
   --card: #ffffff;
-  --card-foreground: #0f172a;
+  --card-foreground: #000000;
   
-  /* Borders */
-  --border: #e2e8f0; /* Slate 200 */
+  /* Borders: Delicate Lines */
+  --border: #e5e5e5;          /* Very light gray */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Premium Dark Theme */
-    --background: #0f172a; /* Slate 900 */
-    --foreground: #f8fafc; /* Slate 50 */
+    /* Luxury Pharmaceutical Theme - Dark Mode */
+    --background: #000000;    /* Absolute black - OLED depth */
+    --foreground: #ffffff;    /* Pure white - maximum contrast */
     
-    --primary: #38bdf8; /* Sky 400 */
-    --primary-foreground: #0f172a;
+    /* Primary: Sophisticated Slate Blue (softer, less aggressive) */
+    --primary: #64748b;       /* Slate 500 - refined, not screaming */
+    --primary-foreground: #ffffff;
     
-    --secondary: #2dd4bf; /* Teal 400 */
-    --secondary-foreground: #0f172a;
+    /* Secondary: Rich Surface */
+    --secondary: #1a1a1a;     /* Near-black for cards */
+    --secondary-foreground: #ffffff;
     
-    --accent: #1e293b; /* Slate 800 */
-    --accent-foreground: #38bdf8;
+    /* Accent: Subtle Depth */
+    --accent: #0d0d0d;        /* Slightly lighter than black */
+    --accent-foreground: #94a3b8; /* Muted slate blue */
     
-    --muted: #1e293b; /* Slate 800 */
-    --muted-foreground: #94a3b8; /* Slate 400 */
+    /* Muted: Refined Hierarchy */
+    --muted: #1a1a1a;         /* Near-black */
+    --muted-foreground: #94a3b8; /* Slate gray for readability */
     
-    --card: #1e293b;
-    --card-foreground: #f8fafc;
+    /* Cards: Floating Surfaces */
+    --card: #0d0d0d;          /* Elevated from pure black */
+    --card-foreground: #ffffff;
     
-    --border: #334155; /* Slate 700 */
+    /* Borders: Subtle Definition */
+    --border: #2a2a2a;        /* Dark gray */
   }
 }
 

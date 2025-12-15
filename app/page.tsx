@@ -20,12 +20,22 @@ const staggerContainer = {
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-20 pb-20">
+    <div className="flex flex-col gap-32 pb-32">
       {/* Hero Section */}
-      <section className="relative h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-950">
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-background">
+        {/* Light mode only: Subtle grid pattern */}
+        <div className="absolute inset-0 dark:hidden" style={{
+          backgroundImage: `
+            linear-gradient(to right, #f0f7ff 1px, transparent 1px),
+            linear-gradient(to bottom, #f0f7ff 1px, transparent 1px)
+          `,
+          backgroundSize: '80px 80px'
+        }} />
+        
+        {/* Soft gradient overlays */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-[20%] -right-[10%] w-[600px] h-[600px] rounded-full bg-primary/5 blur-[100px]" />
-          <div className="absolute top-[40%] -left-[10%] w-[500px] h-[500px] rounded-full bg-secondary/5 blur-[100px]" />
+          <div className="absolute -top-[20%] -right-[10%] w-[600px] h-[600px] rounded-full bg-primary/3 blur-[120px]" />
+          <div className="absolute top-[40%] -left-[10%] w-[500px] h-[500px] rounded-full bg-primary/2 blur-[120px]" />
         </div>
         
         <div className="container px-6 relative z-10">
@@ -45,7 +55,7 @@ export default function Home() {
             
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-foreground">
               Innovating for a <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
+              <span className="text-primary">
                 Healthier Tomorrow
               </span>
             </h1>
@@ -57,13 +67,13 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
               <Link 
                 href="/about" 
-                className="px-8 py-4 bg-primary text-primary-foreground rounded-full font-semibold text-lg hover:bg-primary/90 transition-all shadow-lg shadow-primary/25 hover:shadow-primary/40 active:scale-95 flex items-center gap-2"
+                className="group px-8 py-4 bg-primary text-primary-foreground rounded-full font-semibold text-lg transition-all flex items-center gap-2 hover:scale-105 dark:hover:scale-100 shadow-lg dark:shadow-none hover:shadow-2xl dark:hover:shadow-none"
               >
-                Discover Our Mission <ArrowRight className="w-5 h-5" />
+                Discover Our Mission <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link 
                 href="/contact" 
-                className="px-8 py-4 bg-white dark:bg-slate-800 text-foreground border border-border rounded-full font-semibold text-lg hover:bg-accent transition-all active:scale-95"
+                className="px-8 py-4 bg-white dark:bg-slate-800 text-foreground border border-border rounded-full font-semibold text-lg transition-all hover:scale-105 dark:hover:scale-100 hover:shadow-xl dark:hover:shadow-none"
               >
                 Partner With Us
               </Link>
@@ -132,7 +142,7 @@ export default function Home() {
             <motion.div
               key={idx}
               variants={fadeInUp}
-              className="p-8 rounded-2xl bg-card border border-border hover:shadow-lg hover:shadow-primary/5 transition-all group"
+              className="p-8 rounded-2xl bg-card border border-border transition-all group hover:-translate-y-2 dark:hover:translate-y-0 hover:shadow-2xl dark:hover:shadow-none"
             >
               <div className="w-16 h-16 rounded-xl bg-accent flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 {feature.icon}

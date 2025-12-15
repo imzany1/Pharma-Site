@@ -8,13 +8,19 @@ export default function About() {
     <div className="flex flex-col gap-20 pb-20">
       
       {/* Hero Section */}
-      <section className="bg-muted/50 py-20 px-6">
-        <div className="container mx-auto max-w-4xl text-center space-y-6">
+      <section className="relative bg-muted/50 py-20 px-6">
+        {/* Light mode only: Subtle dot pattern */}
+        <div className="absolute inset-0 dark:hidden opacity-30" style={{
+          backgroundImage: 'radial-gradient(circle, #0066CC 1px, transparent 1px)',
+          backgroundSize: '40px 40px'
+        }} />
+        
+        <div className="container mx-auto max-w-4xl text-center space-y-6 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground">
               Our Journey of Innovation
             </h1>
             <p className="mt-6 text-xl text-muted-foreground leading-relaxed">
@@ -50,7 +56,7 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
-              className="bg-card p-8 rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow"
+              className="bg-card p-8 rounded-2xl border border-border transition-all hover:-translate-y-2 dark:hover:translate-y-0 hover:shadow-2xl dark:hover:shadow-none"
             >
               <div className="bg-primary/5 w-16 h-16 rounded-xl flex items-center justify-center mb-6">
                 {item.icon}
