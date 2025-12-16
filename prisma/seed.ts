@@ -1,36 +1,9 @@
-import { prisma } from "@/lib/prisma"
+import { PrismaClient } from '@prisma/client'
 
-export interface Product {
-  id: string
-  name: string
-  description: string
-  price: number
-  category: string
-  image: string
-  inStock: boolean
-  quantity?: number
-}
+const prisma = new PrismaClient()
 
-// Fetch all products from database
-export async function getAllProducts(): Promise<Product[]> {
-  const products = await prisma.product.findMany({
-    orderBy: { name: "asc" }
-  })
-  return products
-}
-
-// Fetch a single product by ID
-export async function getProductById(id: string): Promise<Product | null> {
-  const product = await prisma.product.findUnique({
-    where: { id }
-  })
-  return product
-}
-
-// For backwards compatibility - static products for fallback/initial display
-export const staticProducts: Product[] = [
+const products = [
   {
-    id: "med-001",
     name: "CardioGuard Plus",
     description: "Advanced cardiovascular support formula with omega-3 fatty acids and CoQ10 for heart health.",
     price: 49.99,
@@ -40,7 +13,6 @@ export const staticProducts: Product[] = [
     quantity: 100
   },
   {
-    id: "med-002",
     name: "ImmunoBoost Pro",
     description: "Comprehensive immune system support with Vitamin C, D3, Zinc, and Elderberry extract.",
     price: 34.99,
@@ -50,7 +22,6 @@ export const staticProducts: Product[] = [
     quantity: 150
   },
   {
-    id: "med-003",
     name: "NeuroCalm",
     description: "Natural stress relief and cognitive support with Ashwagandha, L-Theanine, and B-vitamins.",
     price: 42.99,
@@ -60,7 +31,6 @@ export const staticProducts: Product[] = [
     quantity: 80
   },
   {
-    id: "med-004",
     name: "JointFlex Advanced",
     description: "Premium joint support with Glucosamine, Chondroitin, MSM, and Turmeric for mobility.",
     price: 54.99,
@@ -70,7 +40,6 @@ export const staticProducts: Product[] = [
     quantity: 60
   },
   {
-    id: "med-005",
     name: "DigestEase",
     description: "Probiotic blend with digestive enzymes for optimal gut health and nutrient absorption.",
     price: 29.99,
@@ -80,7 +49,6 @@ export const staticProducts: Product[] = [
     quantity: 200
   },
   {
-    id: "med-006",
     name: "VitaWell Complete",
     description: "Daily multivitamin with essential minerals for overall health and vitality.",
     price: 24.99,
@@ -90,7 +58,6 @@ export const staticProducts: Product[] = [
     quantity: 0
   },
   {
-    id: "med-007",
     name: "SleepSerene",
     description: "Natural sleep aid with Melatonin, Valerian Root, and Magnesium for restful nights.",
     price: 27.99,
@@ -100,7 +67,6 @@ export const staticProducts: Product[] = [
     quantity: 120
   },
   {
-    id: "med-008",
     name: "EnerGize Max",
     description: "Sustained energy formula with B-Complex, Iron, and natural adaptogens.",
     price: 39.99,
@@ -111,6 +77,29 @@ export const staticProducts: Product[] = [
   }
 ]
 
-// Legacy export for backwards compatibility
-export const products = staticProducts
+async function main() {
+  console.log('Starting database seed...')
+  
+  // Clear existing products
+  await prisma.product.deleteMany()
+  console.log('Cleared existing products')
+  
+  // Seed products
+  for (const product of products) {
+    await prisma.product.create({
+      data: product
+    })
+    console.log(`Created product: ${product.name}`)
+  }
+  
+  console.log('Database seeding completed!')
+}
 
+main()
+  .catch((e) => {
+    console.error('Error seeding database:', e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })

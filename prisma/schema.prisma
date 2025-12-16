@@ -15,6 +15,7 @@ model User {
   email     String   @unique
   password  String
   name      String?
+  isAdmin   Boolean  @default(false)
   createdAt DateTime @default(now())
   cartItems CartItem[]
 }
@@ -28,4 +29,17 @@ model CartItem {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, productId])
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  price       Float
+  category    String
+  image       String
+  inStock     Boolean  @default(true)
+  quantity    Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
