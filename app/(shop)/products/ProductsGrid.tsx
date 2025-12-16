@@ -2,9 +2,11 @@
 
 import { motion } from "framer-motion"
 import { ShoppingCart, AlertCircle } from "lucide-react"
-import { useCart } from "../context/CartContext"
+import { useCart } from "../../context/CartContext"
 import type { Product } from "@/lib/products"
 import { useState } from "react"
+import Link from "next/link"
+import Image from "next/image"
 
 interface ProductsGridProps {
   products: Product[]
@@ -23,6 +25,7 @@ export function ProductsGrid({ products }: ProductsGridProps) {
 function ProductCard({ product, index }: { product: Product, index: number }) {
   const { addItem, items, removeItem, updateQuantity } = useCart()
   const [showStockWarning, setShowStockWarning] = useState(false)
+  const [imageError, setImageError] = useState(false)
 
   const cartItem = items.find(item => item.productId === product.id)
   const cartQuantity = cartItem?.quantity || 0
@@ -59,36 +62,52 @@ function ProductCard({ product, index }: { product: Product, index: number }) {
       transition={{ delay: index * 0.05 }}
       className="group bg-card rounded-2xl border border-border overflow-hidden hover:shadow-xl hover:shadow-primary/5 transition-all duration-300"
     >
-      {/* Image Placeholder */}
-      <div className="h-48 bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center relative overflow-hidden">
-        <div className="text-6xl opacity-50">💊</div>
-        {isOutOfStock && (
-          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-            <span className="bg-red-500 text-white px-4 py-1 rounded-full text-sm font-medium">Out of Stock</span>
-          </div>
-        )}
-        <span className="absolute top-3 left-3 bg-primary/10 text-primary text-xs font-medium px-3 py-1 rounded-full">
-          {product.category}
-        </span>
-        {/* Stock indicator */}
-        {!isOutOfStock && (
-          <span className={`absolute top-3 right-3 text-xs font-medium px-3 py-1 rounded-full ${
-            stockAvailable <= 5 
-              ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400' 
-              : 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400'
-          }`}>
-            {stockAvailable <= 5 ? `Only ${stockAvailable} left` : `${stockAvailable} in stock`}
+      {/* Image - Clickable */}
+      <Link href={`/products/${product.id}`} className="block">
+        <div className="h-48 bg-gradient-to-br from-primary/5 to-secondary/5 flex items-center justify-center relative overflow-hidden cursor-pointer">
+          {product.image && !imageError ? (
+             <Image
+              src={product.image}
+              alt={product.name}
+              width={200}
+              height={200}
+              className="object-contain w-full h-full p-4 group-hover:scale-105 transition-transform duration-300"
+              onError={() => setImageError(true)}
+            />
+          ) : (
+             <div className="text-6xl opacity-50 transition-transform duration-300 group-hover:scale-110">💊</div>
+          )}
+         
+          {isOutOfStock && (
+            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+              <span className="bg-red-500 text-white px-4 py-1 rounded-full text-sm font-medium">Out of Stock</span>
+            </div>
+          )}
+          <span className="absolute top-3 left-3 bg-primary/10 text-primary text-xs font-medium px-3 py-1 rounded-full backdrop-blur-sm">
+            {product.category}
           </span>
-        )}
-      </div>
+          {/* Stock indicator */}
+          {!isOutOfStock && (
+            <span className={`absolute top-3 right-3 text-xs font-medium px-3 py-1 rounded-full backdrop-blur-sm ${
+              stockAvailable <= 5 
+                ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400' 
+                : 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400'
+            }`}>
+              {stockAvailable <= 5 ? `Only ${stockAvailable} left` : `${stockAvailable} in stock`}
+            </span>
+          )}
+        </div>
+      </Link>
 
       {/* Content */}
       <div className="p-5 space-y-4">
-        <div>
-          <h3 className="font-bold text-lg group-hover:text-primary transition-colors">{product.name}</h3>
-          <p className="text-muted-foreground text-sm mt-1 line-clamp-2">{product.description}</p>
-        </div>
-
+        <Link href={`/products/${product.id}`} className="block">
+          <div>
+            <h3 className="font-bold text-lg group-hover:text-primary transition-colors">{product.name}</h3>
+            <p className="text-muted-foreground text-sm mt-1 line-clamp-2">{product.description}</p>
+          </div>
+        </Link>
+        
         {/* Stock Warning */}
         {showStockWarning && (
           <motion.div 
@@ -151,4 +170,3 @@ function ProductCard({ product, index }: { product: Product, index: number }) {
     </motion.div>
   )
 }
-
