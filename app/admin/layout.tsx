@@ -30,7 +30,7 @@ export default async function AdminLayout({
       <AdminSidebar user={user} />
 
       {/* Main content */}
-      <main className="md:ml-64 p-4 md:p-8 pt-20 md:pt-28 lg:pt-8 min-h-screen transition-all duration-300">
+      <main className="md:ml-64 p-4 md:p-8 pt-20 md:pt-8 min-h-screen transition-all duration-300">
         <div className="max-w-7xl mx-auto">
           {children}
         </div>

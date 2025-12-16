@@ -47,7 +47,7 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
       <aside className={`
         fixed top-0 bottom-0 left-0 w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 p-6 z-50 transition-transform duration-300 ease-in-out md:translate-x-0
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
-        md:top-20 md:z-40
+        md:z-40
       `}>
         <div className="flex items-center justify-between mb-8 md:block">
           <div>
