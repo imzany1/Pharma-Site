@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Mail, Lock, LogIn, AlertCircle } from "lucide-react"
-import { useCart } from "../context/CartContext"
+import { useCart } from "@/app/context/CartContext"
 
 function LoginForm() {
   const [email, setEmail] = useState("")
