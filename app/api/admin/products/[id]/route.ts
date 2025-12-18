@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth"
-import { prisma } from "@/lib/prisma"
+import { userRepository, productRepository } from "@/lib/repositories"
 import { NextResponse } from "next/server"
 
 interface RouteParams {
@@ -16,18 +16,13 @@ export async function GET(request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { isAdmin: true }
-    })
+    const user = await userRepository.findByIdPublic(session.user.id)
 
     if (!user?.isAdmin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
 
-    const product = await prisma.product.findUnique({
-      where: { id }
-    })
+    const product = await productRepository.findById(id)
 
     if (!product) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 })
@@ -50,10 +45,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { isAdmin: true }
-    })
+    const user = await userRepository.findByIdPublic(session.user.id)
 
     if (!user?.isAdmin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
@@ -62,17 +54,14 @@ export async function PUT(request: Request, { params }: RouteParams) {
     const body = await request.json()
     const { name, description, price, category, image, inStock, quantity } = body
 
-    const product = await prisma.product.update({
-      where: { id },
-      data: {
-        ...(name && { name }),
-        ...(description && { description }),
-        ...(price !== undefined && { price: parseFloat(price) }),
-        ...(category && { category }),
-        ...(image && { image }),
-        ...(inStock !== undefined && { inStock }),
-        ...(quantity !== undefined && { quantity: parseInt(quantity) })
-      }
+    const product = await productRepository.update(id, {
+      ...(name && { name }),
+      ...(description && { description }),
+      ...(price !== undefined && { price: parseFloat(price) }),
+      ...(category && { category }),
+      ...(image && { image }),
+      ...(inStock !== undefined && { inStock }),
+      ...(quantity !== undefined && { quantity: parseInt(quantity) })
     })
 
     return NextResponse.json(product)
@@ -92,18 +81,13 @@ export async function DELETE(request: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { isAdmin: true }
-    })
+    const user = await userRepository.findByIdPublic(session.user.id)
 
     if (!user?.isAdmin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
 
-    await prisma.product.delete({
-      where: { id }
-    })
+    await productRepository.delete(id)
 
     return NextResponse.json({ message: "Product deleted successfully" })
   } catch (error) {

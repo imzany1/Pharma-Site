@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
-import { prisma } from "@/lib/prisma"
+import { cartRepository } from "@/lib/repositories"
 
 // GET: Fetch user's cart
 export async function GET() {
@@ -11,9 +11,7 @@ export async function GET() {
   }
 
   try {
-    const cartItems = await prisma.cartItem.findMany({
-      where: { userId: session.user.id }
-    })
+    const cartItems = await cartRepository.findByUser(session.user.id)
 
     const items = cartItems.map((item) => ({
       productId: item.productId,
@@ -35,54 +33,10 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const userId = session.user.id
-
   try {
     const { items } = await request.json()
     
-    // Get current cart items
-    const currentItems = await prisma.cartItem.findMany({
-      where: { userId },
-      select: { productId: true }
-    })
-    const currentProductIds = new Set(currentItems.map(i => i.productId))
-    
-    // Prepare new items map
-    const newItemsMap = new Map<string, number>()
-    if (items && Array.isArray(items)) {
-      for (const item of items) {
-        if (item.productId && typeof item.productId === 'string' && item.quantity > 0) {
-          newItemsMap.set(item.productId, item.quantity)
-        }
-      }
-    }
-    
-    // Find items to delete (in current but not in new)
-    const toDelete = [...currentProductIds].filter(id => !newItemsMap.has(id))
-    
-    // Use transaction for all operations
-    await prisma.$transaction(async (tx) => {
-      // Delete removed items
-      if (toDelete.length > 0) {
-        await tx.cartItem.deleteMany({
-          where: {
-            userId,
-            productId: { in: toDelete }
-          }
-        })
-      }
-      
-      // Upsert each item (update if exists, create if not)
-      for (const [productId, quantity] of newItemsMap) {
-        await tx.cartItem.upsert({
-          where: {
-            userId_productId: { userId, productId }
-          },
-          update: { quantity },
-          create: { userId, productId, quantity }
-        })
-      }
-    })
+    await cartRepository.replaceCart(session.user.id, items || [])
 
     return NextResponse.json({ success: true })
   } catch (error) {
@@ -91,6 +45,3 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: errorMessage }, { status: 500 })
   }
 }
-
-
-

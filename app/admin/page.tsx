@@ -1,46 +1,36 @@
-import { prisma } from "@/lib/prisma"
+import { productRepository } from "@/lib/repositories"
 import { Package, AlertTriangle, DollarSign, TrendingUp } from "lucide-react"
 import Link from "next/link"
 
 export default async function AdminDashboard() {
   // Get dashboard stats
-  const [totalProducts, lowStockProducts, outOfStockProducts] = await Promise.all([
-    prisma.product.count(),
-    prisma.product.count({ where: { quantity: { lte: 10, gt: 0 } } }),
-    prisma.product.count({ where: { inStock: false } })
-  ])
-
-  const products = await prisma.product.findMany({
-    select: { price: true, quantity: true }
-  })
-  
-  const totalInventoryValue = products.reduce((sum, p) => sum + (p.price * p.quantity), 0)
+  const inventoryStats = await productRepository.getInventoryStats()
 
   const stats = [
     {
       title: "Total Products",
-      value: totalProducts,
+      value: inventoryStats.totalProducts,
       icon: Package,
       color: "bg-blue-500",
       href: "/admin/products"
     },
     {
       title: "Low Stock",
-      value: lowStockProducts,
+      value: inventoryStats.lowStockCount,
       icon: AlertTriangle,
       color: "bg-amber-500",
       href: "/admin/products?filter=low-stock"
     },
     {
       title: "Out of Stock",
-      value: outOfStockProducts,
+      value: inventoryStats.outOfStockCount,
       icon: TrendingUp,
       color: "bg-red-500",
       href: "/admin/products?filter=out-of-stock"
     },
     {
       title: "Inventory Value",
-      value: `$${totalInventoryValue.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+      value: `$${inventoryStats.totalInventoryValue.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
       icon: DollarSign,
       color: "bg-emerald-500",
       href: "/admin/products"
@@ -48,10 +38,7 @@ export default async function AdminDashboard() {
   ]
 
   // Get recent products
-  const recentProducts = await prisma.product.findMany({
-    take: 5,
-    orderBy: { createdAt: "desc" }
-  })
+  const recentProducts = await productRepository.findRecent(5)
 
   return (
     <div>

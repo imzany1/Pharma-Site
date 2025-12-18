@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
-import { prisma } from "@/lib/prisma"
+import { userRepository } from "@/lib/repositories"
 import { AdminSidebar } from "./AdminSidebar"
 
 export default async function AdminLayout({
@@ -14,10 +14,7 @@ export default async function AdminLayout({
     redirect("/login?callbackUrl=/admin")
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { id: true, name: true, email: true, isAdmin: true }
-  })
+  const user = await userRepository.findByIdPublic(session.user.id)
 
   // We know isAdmin is boolean from schema, but Prisma types can be strict
   if (!user || !user.isAdmin) {
@@ -38,4 +35,3 @@ export default async function AdminLayout({
     </div>
   )
 }
-

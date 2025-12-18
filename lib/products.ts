@@ -1,30 +1,21 @@
-import { prisma } from "@/lib/prisma"
+/**
+ * Product data access layer
+ * Uses repository pattern for database abstraction
+ */
 
-export interface Product {
-  id: string
-  name: string
-  description: string
-  price: number
-  category: string
-  image: string
-  inStock: boolean
-  quantity?: number
-}
+import { productRepository, Product } from "@/lib/repositories"
+
+// Re-export Product type for backwards compatibility
+export type { Product }
 
 // Fetch all products from database
 export async function getAllProducts(): Promise<Product[]> {
-  const products = await prisma.product.findMany({
-    orderBy: { name: "asc" }
-  })
-  return products
+  return productRepository.findAll("name")
 }
 
 // Fetch a single product by ID
 export async function getProductById(id: string): Promise<Product | null> {
-  const product = await prisma.product.findUnique({
-    where: { id }
-  })
-  return product
+  return productRepository.findById(id)
 }
 
 // For backwards compatibility - static products for fallback/initial display
@@ -37,7 +28,9 @@ export const staticProducts: Product[] = [
     category: "Heart Health",
     image: "/products/cardioguard.jpg",
     inStock: true,
-    quantity: 100
+    quantity: 100,
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
     id: "med-002",
@@ -47,7 +40,9 @@ export const staticProducts: Product[] = [
     category: "Immunity",
     image: "/products/immunoboost.jpg",
     inStock: true,
-    quantity: 150
+    quantity: 150,
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
     id: "med-003",
@@ -57,7 +52,9 @@ export const staticProducts: Product[] = [
     category: "Mental Wellness",
     image: "/products/neurocalm.jpg",
     inStock: true,
-    quantity: 80
+    quantity: 80,
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
     id: "med-004",
@@ -67,7 +64,9 @@ export const staticProducts: Product[] = [
     category: "Joint Health",
     image: "/products/jointflex.jpg",
     inStock: true,
-    quantity: 60
+    quantity: 60,
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
     id: "med-005",
@@ -77,7 +76,9 @@ export const staticProducts: Product[] = [
     category: "Digestive Health",
     image: "/products/digestease.jpg",
     inStock: true,
-    quantity: 200
+    quantity: 200,
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
     id: "med-006",
@@ -87,7 +88,9 @@ export const staticProducts: Product[] = [
     category: "General Wellness",
     image: "/products/vitawell.jpg",
     inStock: false,
-    quantity: 0
+    quantity: 0,
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
     id: "med-007",
@@ -97,7 +100,9 @@ export const staticProducts: Product[] = [
     category: "Sleep Support",
     image: "/products/sleepserene.jpg",
     inStock: true,
-    quantity: 120
+    quantity: 120,
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
     id: "med-008",
@@ -107,10 +112,11 @@ export const staticProducts: Product[] = [
     category: "Energy",
     image: "/products/energize.jpg",
     inStock: true,
-    quantity: 90
+    quantity: 90,
+    createdAt: new Date(),
+    updatedAt: new Date()
   }
 ]
 
 // Legacy export for backwards compatibility
 export const products = staticProducts
-

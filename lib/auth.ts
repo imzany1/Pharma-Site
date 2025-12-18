@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import bcrypt from "bcrypt"
-import { prisma } from "@/lib/prisma"
+import { userRepository } from "@/lib/repositories"
 
 declare module "next-auth" {
   interface User {
@@ -40,9 +40,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const email = credentials.email as string
         const password = credentials.password as string
 
-        const user = await prisma.user.findUnique({
-          where: { email }
-        })
+        const user = await userRepository.findByEmail(email)
 
         if (!user) {
           return null

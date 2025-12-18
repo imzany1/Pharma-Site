@@ -1,25 +1,28 @@
-import { prisma } from "@/lib/prisma"
+import { productRepository } from "@/lib/repositories"
 import Link from "next/link"
-import { Plus, Edit, Trash2 } from "lucide-react"
-import { DeleteProductButton } from "./DeleteProductButton"
+import { Plus, ArrowLeft} from "lucide-react"
 
-export default async function ProductsPage() {
-  const products = await prisma.product.findMany({
-    orderBy: { createdAt: "desc" }
-  })
-  
-  console.log("Admin Products fetched:", products.length, products[0])
+export default async function AdminProductsPage() {
+  const products = await productRepository.findAll("createdAt")
 
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Products</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">Manage your product inventory</p>
+        <div className="flex items-center gap-4">
+          <Link 
+            href="/admin" 
+            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Link>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Products</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-1">Manage your product inventory</p>
+          </div>
         </div>
         <Link
           href="/admin/products/new"
-          className="flex items-center gap-2 px-5 py-3 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary/90 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors"
         >
           <Plus className="w-5 h-5" />
           Add Product
@@ -27,84 +30,66 @@ export default async function ProductsPage() {
       </div>
 
       {products.length === 0 ? (
-        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-12 text-center">
+        <div className="text-center py-12 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800">
           <p className="text-gray-500 dark:text-gray-400 mb-4">No products found</p>
           <Link
             href="/admin/products/new"
-            className="inline-flex items-center gap-2 px-5 py-3 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary/90 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors"
           >
             <Plus className="w-5 h-5" />
             Add Your First Product
           </Link>
         </div>
       ) : (
-        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-sm">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-800">
-                <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white whitespace-nowrap">Product</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white whitespace-nowrap">Category</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white whitespace-nowrap">Price</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white whitespace-nowrap">Stock</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white whitespace-nowrap">Status</th>
-                  <th className="px-6 py-4 text-right text-sm font-semibold text-gray-900 dark:text-white whitespace-nowrap">Actions</th>
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden">
+          <table className="w-full">
+            <thead className="bg-gray-50 dark:bg-gray-800">
+              <tr>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Product</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Category</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Price</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Stock</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">Status</th>
+                <th className="px-6 py-4 text-right text-sm font-semibold text-gray-900 dark:text-white">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+              {products.map((product) => (
+                <tr key={product.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                  <td className="px-6 py-4">
+                    <p className="font-medium text-gray-900 dark:text-white">{product.name}</p>
+                  </td>
+                  <td className="px-6 py-4 text-gray-500 dark:text-gray-400">{product.category}</td>
+                  <td className="px-6 py-4 text-gray-900 dark:text-white">${product.price.toFixed(2)}</td>
+                  <td className="px-6 py-4">
+                    <span className={`${
+                      product.quantity > 10 ? 'text-emerald-600' : 
+                      product.quantity > 0 ? 'text-amber-600' : 'text-red-600'
+                    }`}>
+                      {product.quantity}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                      product.inStock 
+                        ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' 
+                        : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                    }`}>
+                      {product.inStock ? 'In Stock' : 'Out of Stock'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-right">
+                    <Link
+                      href={`/admin/products/${product.id}/edit`}
+                      className="text-primary hover:text-primary/80 font-medium"
+                    >
+                      Edit
+                    </Link>
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-                {products.map((product) => (
-                  <tr key={product.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                    <td className="px-6 py-4 min-w-[250px]">
-                      <div className="font-medium text-gray-900 dark:text-white">{product.name}</div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400 line-clamp-1">{product.description}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200">
-                        {product.category}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-gray-900 dark:text-white font-medium whitespace-nowrap">
-                      ${product.price.toFixed(2)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`font-medium ${
-                        product.quantity > 10 ? 'text-emerald-600 dark:text-emerald-400' : 
-                        product.quantity > 0 ? 'text-amber-600 dark:text-amber-400' : 
-                        'text-red-600 dark:text-red-400'
-                      }`}>
-                        {product.quantity}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {product.inStock ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                          In Stock
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400">
-                          <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                          Out of Stock
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center justify-end gap-2">
-                        <Link
-                          href={`/admin/products/${product.id}/edit`}
-                          className="p-2 text-gray-500 hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-                          aria-label="Edit product"
-                        >
-                          <Edit className="w-5 h-5" />
-                        </Link>
-                        <DeleteProductButton productId={product.id} productName={product.name} />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

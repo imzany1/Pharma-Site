@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth"
-import { prisma } from "@/lib/prisma"
+import { userRepository, productRepository } from "@/lib/repositories"
 import { NextResponse } from "next/server"
 
 // GET /api/admin/products - List all products
@@ -12,18 +12,13 @@ export async function GET() {
     }
 
     // Check if user is admin
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { isAdmin: true }
-    })
+    const user = await userRepository.findByIdPublic(session.user.id)
 
     if (!user?.isAdmin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
 
-    const products = await prisma.product.findMany({
-      orderBy: { createdAt: "desc" }
-    })
+    const products = await productRepository.findAll("createdAt")
 
     return NextResponse.json(products)
   } catch (error) {
@@ -42,10 +37,7 @@ export async function POST(request: Request) {
     }
 
     // Check if user is admin
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { isAdmin: true }
-    })
+    const user = await userRepository.findByIdPublic(session.user.id)
 
     if (!user?.isAdmin) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
@@ -59,16 +51,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
-    const product = await prisma.product.create({
-      data: {
-        name,
-        description,
-        price: parseFloat(price),
-        category,
-        image: image || "/products/default.jpg",
-        inStock: inStock ?? true,
-        quantity: parseInt(quantity) || 0
-      }
+    const product = await productRepository.create({
+      name,
+      description,
+      price: parseFloat(price),
+      category,
+      image: image || "/products/default.jpg",
+      inStock: inStock ?? true,
+      quantity: parseInt(quantity) || 0
     })
 
     return NextResponse.json(product, { status: 201 })
