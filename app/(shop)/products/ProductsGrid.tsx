@@ -82,14 +82,11 @@ export function ProductsGrid({ products }: ProductsGridProps) {
 
       {/* Grid */}
       <motion.div 
-        layout
         className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
       >
-        <AnimatePresence mode="popLayout">
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </AnimatePresence>
+        {filteredProducts.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
       </motion.div>
 
       {filteredProducts.length === 0 && (
@@ -150,9 +147,8 @@ function ProductCard({ product }: { product: Product }) {
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={{ duration: 0.2 }}
       className="group bg-card rounded-2xl border border-border overflow-hidden hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 h-full flex flex-col"
     >
