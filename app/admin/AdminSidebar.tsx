@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, Package, LogOut, Home, Menu, X } from "lucide-react"
+import { LayoutDashboard, Package, LogOut, Home, Menu, X, ShoppingBag } from "lucide-react"
 import { useState } from "react"
 import type { User } from "next-auth"
 import { signOut } from "next-auth/react"
@@ -17,6 +17,7 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
 
   const links = [
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/admin/orders", label: "Orders", icon: ShoppingBag },
     { href: "/admin/products", label: "Products", icon: Package },
   ]
 

@@ -89,7 +89,16 @@ export function Navbar() {
           {status === "loading" ? (
             <div className="w-20 h-10 bg-muted animate-pulse rounded-full" />
           ) : session?.user ? (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <Link 
+                href="/orders" 
+                className={cn(
+                  "text-sm font-medium transition-colors px-3 py-2 rounded-lg hover:bg-accent",
+                  pathname.startsWith("/orders") ? "text-primary bg-accent" : "text-muted-foreground"
+                )}
+              >
+                My Orders
+              </Link>
               <div className="flex items-center gap-2 px-3 py-2 bg-muted rounded-full">
                 <User className="w-4 h-4 text-muted-foreground" />
                 <span className="text-sm font-medium">{session.user.name || session.user.email?.split("@")[0]}</span>
@@ -157,6 +166,13 @@ export function Navbar() {
               
               {session?.user ? (
                 <>
+                  <Link
+                    href="/orders"
+                    onClick={() => setIsOpen(false)}
+                    className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                  >
+                    My Orders
+                  </Link>
                   <div className="flex items-center gap-2 py-2 text-muted-foreground">
                     <User className="w-5 h-5" />
                     <span>{session.user.name || session.user.email}</span>

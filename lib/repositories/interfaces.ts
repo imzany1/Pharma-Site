@@ -15,6 +15,10 @@ import type {
   InventoryStats,
   CartItem,
   CartItemInput,
+  Order,
+  OrderItem,
+  OrderStatus,
+  CreateOrderData,
 } from "./types"
 
 // ============ User Repository ============
@@ -130,4 +134,57 @@ export interface ICartRepository {
    * Merge guest cart items into user's cart
    */
   mergeGuestCart(userId: string, guestItems: CartItemInput[]): Promise<void>
+}
+
+// ============ Order Repository ============
+export interface IOrderRepository {
+  /**
+   * Create a new order with items (atomic transaction with stock deduction)
+   */
+  create(data: CreateOrderData): Promise<Order>
+
+  /**
+   * Find an order by its unique ID
+   */
+  findById(id: string): Promise<Order | null>
+
+  /**
+   * Find an order by its order number
+   */
+  findByOrderNumber(orderNumber: string): Promise<Order | null>
+
+  /**
+   * Get all orders for a specific user
+   */
+  findByUser(userId: string): Promise<Order[]>
+
+  /**
+   * Get all orders with pagination
+   */
+  findAll(options?: { limit?: number; offset?: number }): Promise<Order[]>
+
+  /**
+   * Update order status
+   */
+  updateStatus(id: string, status: OrderStatus): Promise<Order>
+
+  /**
+   * Count orders with optional filter
+   */
+  count(filter?: { userId?: string; status?: OrderStatus }): Promise<number>
+
+  /**
+   * Get recent orders for dashboard
+   */
+  getRecentOrders(limit: number): Promise<Order[]>
+
+  /**
+   * Get order statistics for admin dashboard
+   */
+  getOrderStats(): Promise<{
+    totalOrders: number
+    pendingOrders: number
+    todayRevenue: number
+    totalRevenue: number
+  }>
 }

@@ -5,7 +5,6 @@ import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, CheckCircle, AlertCircle 
 import Link from "next/link"
 import { useCart } from "@/app/context/CartContext"
 import { getCartProducts } from "@/app/actions/cart"
-import { processCheckout } from "@/app/actions/checkout"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -99,9 +98,9 @@ export default function CartPage() {
     updateQuantity(item.id, item.cartQuantity + 1)
   }
 
-  const handleCheckout = async () => {
+  const handleCheckout = () => {
     if (!session?.user) {
-      router.push("/login?callbackUrl=/cart")
+      router.push("/login?callbackUrl=/checkout")
       return
     }
     
@@ -112,27 +111,8 @@ export default function CartPage() {
       return
     }
     
-    setIsCheckingOut(true)
-
-    try {
-      const checkoutItems = items.map(item => ({
-        productId: item.productId,
-        quantity: item.quantity
-      }))
-
-      const result = await processCheckout(checkoutItems)
-
-      if (result.success) {
-        setShowSuccess(true)
-        clearCart()
-      } else {
-        alert(result.error || "Checkout failed")
-      }
-    } catch {
-      alert("Something went wrong during checkout")
-    } finally {
-      setIsCheckingOut(false)
-    }
+    // Navigate to checkout page
+    router.push("/checkout")
   }
 
   const finishCheckout = () => {

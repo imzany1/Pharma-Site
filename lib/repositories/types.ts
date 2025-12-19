@@ -88,6 +88,65 @@ export interface CartItemInput {
   quantity: number
 }
 
+// ============ Order Types ============
+export type OrderStatus = 'PENDING' | 'CONFIRMED' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED'
+export type PaymentStatus = 'UNPAID' | 'PAID' | 'FAILED'
+
+export interface Order {
+  id: string
+  orderNumber: string
+  userId: string
+  status: OrderStatus
+  paymentStatus: PaymentStatus
+  paymentMethod: string
+  shippingName: string
+  shippingEmail: string
+  shippingPhone: string
+  shippingAddress: string
+  shippingCity: string
+  shippingState: string
+  shippingZip: string
+  subtotal: number
+  total: number
+  notes: string | null
+  createdAt: Date
+  updatedAt: Date
+  items?: OrderItem[]
+}
+
+export interface OrderItem {
+  id: string
+  orderId: string
+  productId: string
+  productName: string
+  productImage: string
+  productPrice: number
+  quantity: number
+  total: number
+}
+
+export interface CreateOrderItemData {
+  productId: string
+  productName: string
+  productImage: string
+  productPrice: number
+  quantity: number
+}
+
+export interface CreateOrderData {
+  userId: string
+  items: CreateOrderItemData[]
+  paymentMethod?: string
+  shippingName: string
+  shippingEmail: string
+  shippingPhone: string
+  shippingAddress: string
+  shippingCity: string
+  shippingState: string
+  shippingZip: string
+  notes?: string
+}
+
 // ============ Transaction Types ============
 export interface TransactionContext {
   // Abstraction for transactional operations
