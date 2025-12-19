@@ -1,10 +1,10 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { ShoppingCart, AlertCircle } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { ShoppingCart, AlertCircle, Search, X } from "lucide-react"
 import { useCart } from "../../context/CartContext"
 import type { Product } from "@/lib/products"
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -13,16 +13,109 @@ interface ProductsGridProps {
 }
 
 export function ProductsGrid({ products }: ProductsGridProps) {
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("All")
+  
+  // Extract unique categories
+  const categories = useMemo(() => {
+    const cats = new Set(products.map(p => p.category))
+    return ["All", ...Array.from(cats)].sort()
+  }, [products])
+
+  // Filter products
+  const filteredProducts = useMemo(() => {
+    return products.filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          product.description.toLowerCase().includes(searchQuery.toLowerCase())
+      const matchesCategory = selectedCategory === "All" || product.category === selectedCategory
+      
+      return matchesSearch && matchesCategory
+    })
+  }, [products, searchQuery, selectedCategory])
+
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-      {products.map((product, idx) => (
-        <ProductCard key={product.id} product={product} index={idx} />
-      ))}
+    <div className="space-y-8">
+      {/* Search and Filter Controls */}
+      <div className="bg-card border border-border rounded-3xl p-6 shadow-sm space-y-6">
+        {/* Search Bar */}
+        <div className="relative max-w-xl mx-auto">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground w-5 h-5" />
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-12 pr-12 py-3 rounded-full border border-border bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-lg"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-1"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Categories */}
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {categories.map(category => (
+            <button
+              key={category}
+              onClick={() => setSelectedCategory(category)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                selectedCategory === category
+                  ? "bg-primary text-primary-foreground shadow-md scale-105"
+                  : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
+              }`}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Results Count */}
+      <div className="text-center text-muted-foreground text-sm">
+        Showing {filteredProducts.length} results
+      </div>
+
+      {/* Grid */}
+      <motion.div 
+        layout
+        className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+      >
+        <AnimatePresence mode="popLayout">
+          {filteredProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </AnimatePresence>
+      </motion.div>
+
+      {filteredProducts.length === 0 && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center py-20"
+        >
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
+            <Search className="w-8 h-8 text-muted-foreground" />
+          </div>
+          <h3 className="text-xl font-bold mb-2">No products found</h3>
+          <p className="text-muted-foreground">Try adjusting your search or filters</p>
+          <button 
+            onClick={() => { setSearchQuery(""); setSelectedCategory("All"); }}
+            className="mt-4 text-primary font-medium hover:underline"
+          >
+            Clear all filters
+          </button>
+        </motion.div>
+      )}
     </div>
   )
 }
 
-function ProductCard({ product, index }: { product: Product, index: number }) {
+function ProductCard({ product }: { product: Product }) {
   const { addItem, items, removeItem, updateQuantity } = useCart()
   const [showStockWarning, setShowStockWarning] = useState(false)
   const [imageError, setImageError] = useState(false)
@@ -56,11 +149,12 @@ function ProductCard({ product, index }: { product: Product, index: number }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.05 }}
-      className="group bg-card rounded-2xl border border-border overflow-hidden hover:shadow-xl hover:shadow-primary/5 transition-all duration-300"
+      layout
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.2 }}
+      className="group bg-card rounded-2xl border border-border overflow-hidden hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 h-full flex flex-col"
     >
       {/* Image - Clickable */}
       <Link href={`/products/${product.id}`} className="block">
@@ -100,8 +194,8 @@ function ProductCard({ product, index }: { product: Product, index: number }) {
       </Link>
 
       {/* Content */}
-      <div className="p-5 space-y-4">
-        <Link href={`/products/${product.id}`} className="block">
+      <div className="p-5 space-y-4 flex flex-col flex-grow">
+        <Link href={`/products/${product.id}`} className="block flex-grow">
           <div>
             <h3 className="font-bold text-lg group-hover:text-primary transition-colors">{product.name}</h3>
             <p className="text-muted-foreground text-sm mt-1 line-clamp-2">{product.description}</p>
@@ -109,18 +203,21 @@ function ProductCard({ product, index }: { product: Product, index: number }) {
         </Link>
         
         {/* Stock Warning */}
-        {showStockWarning && (
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-2 text-amber-600 dark:text-amber-400 text-sm bg-amber-50 dark:bg-amber-900/20 px-3 py-2 rounded-lg"
-          >
-            <AlertCircle className="w-4 h-4" />
-            <span>Maximum stock reached ({stockAvailable} available)</span>
-          </motion.div>
-        )}
+        <AnimatePresence>
+          {showStockWarning && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="flex items-center gap-2 text-amber-600 dark:text-amber-400 text-sm bg-amber-50 dark:bg-amber-900/20 px-3 py-2 rounded-lg overflow-hidden"
+            >
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <span className="truncate">Max stock reached</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mt-auto pt-2">
           <span className="text-2xl font-bold text-primary">${product.price.toFixed(2)}</span>
           
           {cartQuantity > 0 ? (
@@ -147,9 +244,10 @@ function ProductCard({ product, index }: { product: Product, index: number }) {
               </button>
               <button
                 onClick={() => removeItem(product.id)}
-                className="ml-2 text-red-500 hover:text-red-700 transition-colors text-sm font-medium"
+                className="ml-2 text-red-500 hover:text-red-700 transition-colors p-1"
+                aria-label="Remove item"
               >
-                Remove
+                <X className="w-4 h-4" />
               </button>
             </div>
           ) : (

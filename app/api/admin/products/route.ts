@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth"
 import { userRepository, productRepository } from "@/lib/repositories"
 import { NextResponse } from "next/server"
+import { revalidatePath } from "next/cache"
 
 // GET /api/admin/products - List all products
 export async function GET() {
@@ -60,6 +61,10 @@ export async function POST(request: Request) {
       inStock: inStock ?? true,
       quantity: parseInt(quantity) || 0
     })
+
+    // On-Demand Revalidation: Clear cache for products list
+    revalidatePath("/products")
+    revalidatePath("/") // Also clear homepage in case it shows recent products
 
     return NextResponse.json(product, { status: 201 })
   } catch (error) {

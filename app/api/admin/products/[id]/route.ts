@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth"
 import { userRepository, productRepository } from "@/lib/repositories"
 import { NextResponse } from "next/server"
+import { revalidatePath } from "next/cache"
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -64,6 +65,11 @@ export async function PUT(request: Request, { params }: RouteParams) {
       ...(quantity !== undefined && { quantity: parseInt(quantity) })
     })
 
+    // On-Demand Revalidation: Clear cache for this specific product + listing
+    revalidatePath(`/products/${id}`)
+    revalidatePath("/products") 
+    revalidatePath("/") 
+
     return NextResponse.json(product)
   } catch (error) {
     console.error("Error updating product:", error)
@@ -88,6 +94,11 @@ export async function DELETE(request: Request, { params }: RouteParams) {
     }
 
     await productRepository.delete(id)
+
+    // On-Demand Revalidation: Clear cache
+    revalidatePath(`/products/${id}`)
+    revalidatePath("/products")
+    revalidatePath("/")
 
     return NextResponse.json({ message: "Product deleted successfully" })
   } catch (error) {

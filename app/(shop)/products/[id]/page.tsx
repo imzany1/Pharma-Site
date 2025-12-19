@@ -5,6 +5,9 @@ import Link from "next/link"
 import { ChevronLeft } from "lucide-react"
 import { ProductDetailsClient } from "./ProductDetailsClient"
 
+// Enable ISR: Revalidate this page every hour
+export const revalidate = 3600
+
 export default async function ProductPage({ params }: { params: { id: string } }) {
   // Await params first (Next.js 15+ requirement, good practice generally)
   const { id } = await params
