@@ -36,6 +36,7 @@ export default function CheckoutPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
+  const [orderPlaced, setOrderPlaced] = useState(false) // Fix for race condition
   const [error, setError] = useState("")
   
   const [shipping, setShipping] = useState<ShippingData>({
@@ -56,12 +57,12 @@ export default function CheckoutPage() {
     }
   }, [status, router])
 
-  // Redirect if cart is empty
+  // Redirect if cart is empty (unless order was just placed)
   useEffect(() => {
-    if (!cartLoading && items.length === 0) {
+    if (!orderPlaced && !cartLoading && items.length === 0) {
       router.push("/cart")
     }
-  }, [cartLoading, items, router])
+  }, [cartLoading, items, router, orderPlaced])
 
   // Fetch products
   useEffect(() => {
@@ -184,6 +185,7 @@ export default function CheckoutPage() {
       }
 
       // Clear cart and redirect to confirmation
+      setOrderPlaced(true) // Prevent auto-redirect to /cart
       clearCart()
       router.push(`/orders/${result.orderId}/confirmation`)
       
