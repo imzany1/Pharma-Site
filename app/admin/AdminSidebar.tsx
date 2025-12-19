@@ -21,7 +21,12 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
     { href: "/admin/products", label: "Products", icon: Package },
   ]
 
-  const isActive = (path: string) => pathname === path
+  const isActive = (path: string) => {
+    if (path === "/admin") {
+      return pathname === "/admin"
+    }
+    return pathname.startsWith(path)
+  }
 
   return (
     <>

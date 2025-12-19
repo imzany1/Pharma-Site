@@ -139,6 +139,15 @@ export class PrismaOrderRepository implements IOrderRepository {
     return order as Order
   }
 
+  async updatePaymentStatus(id: string, status: "PAID" | "UNPAID" | "FAILED"): Promise<Order> {
+    const order = await prisma.order.update({
+      where: { id },
+      data: { paymentStatus: status },
+      include: { items: true }
+    })
+    return order as Order
+  }
+
   async count(filter?: { userId?: string; status?: OrderStatus }): Promise<number> {
     return prisma.order.count({
       where: {

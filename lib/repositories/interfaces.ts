@@ -169,6 +169,11 @@ export interface IOrderRepository {
   updateStatus(id: string, status: OrderStatus): Promise<Order>
 
   /**
+   * Update payment status
+   */
+  updatePaymentStatus(id: string, status: "PAID" | "UNPAID" | "FAILED"): Promise<Order>
+
+  /**
    * Count orders with optional filter
    */
   count(filter?: { userId?: string; status?: OrderStatus }): Promise<number>

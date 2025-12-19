@@ -28,6 +28,17 @@ async function updateOrderStatus(formData: FormData) {
   if (!orderId || !newStatus) return
   
   await orderRepository.updateStatus(orderId, newStatus)
+  
+  // If order is delivered, mark payment as PAID
+  if (newStatus === "DELIVERED") {
+    await orderRepository.updatePaymentStatus(orderId, "PAID")
+  }
+
+  // If order is cancelled, we might want to ensure payment is voided/refunded or handle stock (stock is already handled in some repos, but good to be safe)
+  if (newStatus === "CANCELLED") {
+    await orderRepository.updatePaymentStatus(orderId, "FAILED")
+    // Note: Stock restoration logic would go here if not already handled
+  }
   revalidatePath(`/admin/orders/${orderId}`)
   revalidatePath("/admin/orders")
 }
@@ -66,6 +77,7 @@ export default async function AdminOrderDetailsPage({ params }: Props) {
           <label className="text-sm font-medium text-gray-500">Status:</label>
           <select 
             name="status"
+            key={order.status}
             defaultValue={order.status}
             className={`px-4 py-2 rounded-xl border font-medium ${statusColors[order.status]}`}
           >
