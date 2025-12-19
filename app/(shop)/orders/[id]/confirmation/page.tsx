@@ -23,7 +23,7 @@ export default async function OrderConfirmationPage({ params }: Props) {
   }
 
   return (
-    <div className="container px-6 py-12 max-w-2xl mx-auto">
+    <div className="container px-4 sm:px-6 py-8 sm:py-12 max-w-2xl mx-auto">
       <div className="text-center mb-8">
         <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
           <CheckCircle className="w-10 h-10 text-emerald-600 dark:text-emerald-400" />
@@ -58,7 +58,7 @@ export default async function OrderConfirmationPage({ params }: Props) {
                   <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
                 </div>
               </div>
-              <p className="font-medium">₹{item.total.toFixed(2)}</p>
+              <p className="font-medium">${item.total.toFixed(2)}</p>
             </div>
           ))}
         </div>
@@ -66,7 +66,7 @@ export default async function OrderConfirmationPage({ params }: Props) {
         <div className="border-t border-border pt-4 space-y-2">
           <div className="flex justify-between text-muted-foreground">
             <span>Subtotal</span>
-            <span>₹{order.subtotal.toFixed(2)}</span>
+            <span>${order.subtotal.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-muted-foreground">
             <span>Shipping</span>
@@ -74,7 +74,7 @@ export default async function OrderConfirmationPage({ params }: Props) {
           </div>
           <div className="flex justify-between font-bold text-lg pt-2 border-t border-border">
             <span>Total</span>
-            <span className="text-primary">₹{order.total.toFixed(2)}</span>
+            <span className="text-primary">${order.total.toFixed(2)}</span>
           </div>
         </div>
       </div>

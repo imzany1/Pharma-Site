@@ -190,8 +190,8 @@ export default function CartPage() {
   }
 
   return (
-    <div className="container px-6 py-12">
-      <h1 className="text-3xl font-bold mb-8">Shopping Cart</h1>
+    <div className="container px-4 sm:px-6 py-8 sm:py-12">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">Shopping Cart</h1>
       
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Cart Items */}
@@ -211,9 +211,9 @@ export default function CartPage() {
                   isOverStock ? 'border-red-300 dark:border-red-800' : 'border-border'
                 }`}
               >
-                <div className="flex gap-4">
+                <div className="flex flex-wrap sm:flex-nowrap gap-4">
                   {/* Product Image */}
-                  <div className="w-24 h-24 bg-muted rounded-lg flex items-center justify-center text-3xl shrink-0 overflow-hidden relative">
+                  <div className="w-16 h-16 sm:w-24 sm:h-24 bg-muted rounded-lg flex items-center justify-center text-3xl shrink-0 overflow-hidden relative">
                     {item.image && item.image !== "" ? (
                       <img 
                         src={item.image} 
@@ -301,7 +301,7 @@ export default function CartPage() {
         {/* Order Summary */}
         <div className="lg:col-span-1">
           <div className="bg-card border border-border rounded-2xl p-6 sticky top-24">
-            <h2 className="text-xl font-bold mb-6">Order Summary</h2>
+            <h2 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6">Order Summary</h2>
             
             <div className="space-y-3 mb-6">
               <div className="flex justify-between text-muted-foreground">

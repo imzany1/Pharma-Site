@@ -84,7 +84,7 @@ export default function Home() {
 
       {/* Stats Section */}
       <section className="container px-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 rounded-3xl bg-primary/5 p-12 border border-primary/10">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 rounded-3xl bg-primary/5 p-8 md:p-12 border border-primary/10">
           {[
             { label: "Patients Served", value: "10M+" },
             { label: "Countries", value: "50+" },
@@ -99,8 +99,8 @@ export default function Home() {
               transition={{ delay: index * 0.1 }}
               className="text-center space-y-2"
             >
-              <h3 className="text-4xl md:text-5xl font-bold text-primary">{stat.value}</h3>
-              <p className="text-muted-foreground font-medium">{stat.label}</p>
+              <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary">{stat.value}</h3>
+              <p className="text-muted-foreground font-medium text-sm md:text-base">{stat.label}</p>
             </motion.div>
           ))}
         </div>
@@ -120,7 +120,7 @@ export default function Home() {
           initial="initial"
           whileInView="animate"
           viewport={{ once: true }}
-          className="grid md:grid-cols-3 gap-8"
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {[
             {

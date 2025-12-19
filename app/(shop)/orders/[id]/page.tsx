@@ -66,31 +66,73 @@ export default async function OrderDetailsPage({ params }: Props) {
 
       {/* Status Timeline */}
       {order.status !== "CANCELLED" && (
-        <div className="bg-card border border-border rounded-2xl p-6 mb-8">
+        <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 mb-8">
           <h2 className="font-bold mb-6 flex items-center gap-2">
-            <Clock className="w-5 h-5" /> Order Progress
+            <Clock className="w-5 h-5 text-primary" /> Order Progress
           </h2>
-          <div className="flex items-center justify-between">
+          
+          {/* Desktop/Tablet Horizontal Timeline */}
+          <div className="hidden sm:flex items-center justify-between relative z-0">
             {statusSteps.map((step, idx) => {
               const isCompleted = idx <= currentStepIndex
               const isCurrent = idx === currentStepIndex
               return (
-                <div key={step} className="flex flex-col items-center flex-1">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                <div key={step} className="flex flex-col items-center flex-1 relative z-10">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
+                    isCompleted 
+                      ? "bg-primary text-white" 
+                      : "bg-muted text-muted-foreground"
+                  } ${isCurrent ? "ring-4 ring-primary/20 scale-110" : ""}`}>
+                    {isCompleted ? "✓" : idx + 1}
+                  </div>
+                  <span className={`text-xs mt-2 font-medium ${isCompleted ? "text-foreground" : "text-muted-foreground"}`}>
+                    {step.charAt(0) + step.slice(1).toLowerCase()}
+                  </span>
+                </div>
+              )
+            })}
+            
+            {/* Connector Line Background */}
+            <div className="absolute top-4 left-0 w-full h-0.5 bg-muted -z-10" />
+            
+            {/* Active Connector Line */}
+            <div 
+              className="absolute top-4 left-0 h-0.5 bg-primary -z-10 transition-all duration-500" 
+              style={{ width: `${(currentStepIndex / (statusSteps.length - 1)) * 100}%` }} 
+            />
+          </div>
+
+          {/* Mobile Vertical Timeline */}
+          <div className="flex sm:hidden flex-col space-y-0 ml-2">
+            {statusSteps.map((step, idx) => {
+              const isCompleted = idx <= currentStepIndex
+              const isCurrent = idx === currentStepIndex
+              
+              return (
+                <div key={step} className="flex gap-4 relative">
+                  {/* Vertical Line */}
+                  {idx < statusSteps.length - 1 && (
+                    <div className={`absolute left-4 top-8 bottom-0 w-0.5 -ml-px h-full ${
+                      idx < currentStepIndex ? "bg-primary" : "bg-muted"
+                    }`} />
+                  )}
+                  
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 z-10 transition-all ${
                     isCompleted 
                       ? "bg-primary text-white" 
                       : "bg-muted text-muted-foreground"
                   } ${isCurrent ? "ring-4 ring-primary/20" : ""}`}>
                     {isCompleted ? "✓" : idx + 1}
                   </div>
-                  <span className={`text-xs mt-2 ${isCompleted ? "text-foreground font-medium" : "text-muted-foreground"}`}>
-                    {step.charAt(0) + step.slice(1).toLowerCase()}
-                  </span>
-                  {idx < statusSteps.length - 1 && (
-                    <div className={`absolute w-full h-0.5 top-4 left-1/2 -z-10 ${
-                      idx < currentStepIndex ? "bg-primary" : "bg-muted"
-                    }`} style={{ width: "calc(100% - 2rem)" }} />
-                  )}
+                  
+                  <div className="pb-8 pt-1">
+                    <p className={`text-sm font-medium ${isCompleted ? "text-foreground" : "text-muted-foreground"}`}>
+                      {step.charAt(0) + step.slice(1).toLowerCase()}
+                    </p>
+                    {isCurrent && (
+                      <p className="text-xs text-primary mt-0.5 font-medium">Current Status</p>
+                    )}
+                  </div>
                 </div>
               )
             })}
@@ -98,17 +140,17 @@ export default async function OrderDetailsPage({ params }: Props) {
         </div>
       )}
 
-      <div className="grid lg:grid-cols-3 gap-8">
+      <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
         {/* Order Items */}
         <div className="lg:col-span-2">
-          <div className="bg-card border border-border rounded-2xl p-6">
+          <div className="bg-card border border-border rounded-2xl p-4 sm:p-6">
             <h2 className="font-bold mb-4 flex items-center gap-2">
-              <Package className="w-5 h-5" /> Order Items
+              <Package className="w-5 h-5 text-primary" /> Order Items
             </h2>
             <div className="space-y-4">
               {order.items?.map((item) => (
-                <div key={item.id} className="flex gap-4 py-3 border-b border-border last:border-0">
-                  <div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center overflow-hidden shrink-0">
+                <div key={item.id} className="flex gap-3 sm:gap-4 py-3 border-b border-border last:border-0">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-muted rounded-lg flex items-center justify-center overflow-hidden shrink-0">
                     {item.productImage ? (
                       <img src={item.productImage} alt={item.productName} className="w-full h-full object-cover" />
                     ) : (
@@ -116,28 +158,28 @@ export default async function OrderDetailsPage({ params }: Props) {
                     )}
                   </div>
                   <div className="flex-grow min-w-0">
-                    <h3 className="font-medium truncate">{item.productName}</h3>
+                    <h3 className="font-medium truncate text-sm sm:text-base">{item.productName}</h3>
                     <p className="text-sm text-muted-foreground">
-                      ₹{item.productPrice.toFixed(2)} × {item.quantity}
+                      ${item.productPrice.toFixed(2)} × {item.quantity}
                     </p>
                   </div>
-                  <p className="font-bold shrink-0">₹{item.total.toFixed(2)}</p>
+                  <p className="font-bold shrink-0 text-sm sm:text-base">${item.total.toFixed(2)}</p>
                 </div>
               ))}
             </div>
 
             <div className="mt-6 pt-4 border-t border-border space-y-2">
-              <div className="flex justify-between text-muted-foreground">
+              <div className="flex justify-between text-muted-foreground text-sm sm:text-base">
                 <span>Subtotal</span>
-                <span>₹{order.subtotal.toFixed(2)}</span>
+                <span>${order.subtotal.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-muted-foreground">
+              <div className="flex justify-between text-muted-foreground text-sm sm:text-base">
                 <span>Shipping</span>
-                <span className="text-emerald-600">Free</span>
+                <span className="text-emerald-600 font-medium">Free</span>
               </div>
-              <div className="flex justify-between font-bold text-lg pt-2 border-t border-border">
+              <div className="flex justify-between font-bold text-lg pt-2 border-t border-border mt-2">
                 <span>Total</span>
-                <span className="text-primary">₹{order.total.toFixed(2)}</span>
+                <span className="text-primary">${order.total.toFixed(2)}</span>
               </div>
             </div>
           </div>

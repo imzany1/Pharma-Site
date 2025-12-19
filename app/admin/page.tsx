@@ -37,14 +37,14 @@ export default async function AdminDashboard() {
     },
     {
       title: "Today's Revenue",
-      value: `₹${orderStats.todayRevenue.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
+      value: `$${orderStats.todayRevenue.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
       icon: DollarSign,
       color: "bg-emerald-500",
       href: "/admin/orders"
     },
     {
       title: "Total Revenue",
-      value: `₹${orderStats.totalRevenue.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`,
+      value: `$${orderStats.totalRevenue.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
       icon: TrendingUp,
       color: "bg-purple-500",
       href: "/admin/orders"
@@ -140,7 +140,7 @@ export default async function AdminDashboard() {
                     <p className="text-sm text-gray-500 dark:text-gray-400">{order.shippingName}</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-medium text-gray-900 dark:text-white">₹{order.total.toFixed(2)}</p>
+                    <p className="font-medium text-gray-900 dark:text-white">${order.total.toFixed(2)}</p>
                     <span className={`text-xs px-2 py-0.5 rounded-full ${statusColors[order.status]}`}>
                       {order.status}
                     </span>
@@ -172,7 +172,7 @@ export default async function AdminDashboard() {
                     <p className="text-sm text-gray-500 dark:text-gray-400">{product.category}</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-medium text-gray-900 dark:text-white">₹{product.price}</p>
+                    <p className="font-medium text-gray-900 dark:text-white">${product.price}</p>
                     <p className={`text-sm ${product.quantity > 10 ? 'text-emerald-500' : product.quantity > 0 ? 'text-amber-500' : 'text-red-500'}`}>
                       {product.quantity} in stock
                     </p>

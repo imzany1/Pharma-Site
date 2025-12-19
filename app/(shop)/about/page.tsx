@@ -32,7 +32,7 @@ export default function About() {
 
       {/* Values Section */}
       <section className="container px-6">
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {[
             {
               icon: <Target className="w-10 h-10 text-primary" />,
@@ -98,7 +98,7 @@ export default function About() {
       {/* Leadership */}
       <section className="container px-6 mb-20">
         <h2 className="text-3xl font-bold text-center mb-16">Leadership Team</h2>
-        <div className="grid md:grid-cols-4 gap-8">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
             { name: "Dr. Elena Rossi", role: "CEO", initials: "ER" },
             { name: "James Chen", role: "Chief Scientific Officer", initials: "JC" },

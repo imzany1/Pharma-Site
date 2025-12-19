@@ -102,11 +102,11 @@ export default async function AdminOrderDetailsPage({ params }: Props) {
                   <div className="flex-grow min-w-0">
                     <h3 className="font-medium text-gray-900 dark:text-white truncate">{item.productName}</h3>
                     <p className="text-sm text-gray-500">
-                      ₹{item.productPrice.toFixed(2)} × {item.quantity}
+                      ${item.productPrice.toFixed(2)} × {item.quantity}
                     </p>
                     <p className="text-xs text-gray-400">ID: {item.productId}</p>
                   </div>
-                  <p className="font-bold text-gray-900 dark:text-white shrink-0">₹{item.total.toFixed(2)}</p>
+                  <p className="font-bold text-gray-900 dark:text-white shrink-0">${item.total.toFixed(2)}</p>
                 </div>
               ))}
             </div>
@@ -114,7 +114,7 @@ export default async function AdminOrderDetailsPage({ params }: Props) {
             <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-800 space-y-2">
               <div className="flex justify-between text-gray-500">
                 <span>Subtotal</span>
-                <span>₹{order.subtotal.toFixed(2)}</span>
+                <span>${order.subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-gray-500">
                 <span>Shipping</span>
@@ -122,7 +122,7 @@ export default async function AdminOrderDetailsPage({ params }: Props) {
               </div>
               <div className="flex justify-between font-bold text-lg pt-2 border-t border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white">
                 <span>Total</span>
-                <span className="text-primary">₹{order.total.toFixed(2)}</span>
+                <span className="text-primary">${order.total.toFixed(2)}</span>
               </div>
             </div>
           </div>

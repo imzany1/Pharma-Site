@@ -96,7 +96,7 @@ async function sendOrderEmails(
     <tr>
       <td style="padding: 8px; border-bottom: 1px solid #eee;">${item.productName}</td>
       <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: center;">${item.quantity}</td>
-      <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">₹${item.total.toFixed(2)}</td>
+      <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">$${item.total.toFixed(2)}</td>
     </tr>
   `).join("") || ""
 
@@ -113,7 +113,7 @@ async function sendOrderEmails(
         <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <p style="margin: 0 0 10px;"><strong>Order Number:</strong> ${order.orderNumber}</p>
           <p style="margin: 0 0 10px;"><strong>Payment Method:</strong> Cash on Delivery</p>
-          <p style="margin: 0;"><strong>Total Amount:</strong> ₹${order.total.toFixed(2)}</p>
+          <p style="margin: 0;"><strong>Total Amount:</strong> $${order.total.toFixed(2)}</p>
         </div>
 
         <h3>Items Ordered:</h3>
@@ -162,12 +162,12 @@ async function sendOrderEmails(
   await resend.emails.send({
     from: "PharmaCorp Orders <onboarding@resend.dev>",
     to: ["hussainabbas7492@gmail.com"],
-    subject: `[NEW ORDER] ${order.orderNumber} - ₹${order.total.toFixed(2)}`,
+    subject: `[NEW ORDER] ${order.orderNumber} - $${order.total.toFixed(2)}`,
     html: `
       <h2>New Order Received!</h2>
       <p><strong>Order Number:</strong> ${order.orderNumber}</p>
       <p><strong>Customer:</strong> ${order.shippingName} (${customerEmail})</p>
-      <p><strong>Total:</strong> ₹${order.total.toFixed(2)}</p>
+      <p><strong>Total:</strong> $${order.total.toFixed(2)}</p>
       <p><strong>Payment:</strong> Cash on Delivery</p>
       <hr>
       <h3>Shipping Address:</h3>

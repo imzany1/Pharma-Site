@@ -121,22 +121,22 @@ export default function Contact() {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label htmlFor="firstName" className="text-sm font-medium">First Name</label>
-                    <input required name="firstName" id="firstName" type="text" className="w-full px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-background" placeholder="John" />
+                    <input required name="firstName" id="firstName" type="text" className="w-full px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-background text-base" placeholder="John" />
                   </div>
                   <div className="space-y-2">
                     <label htmlFor="lastName" className="text-sm font-medium">Last Name</label>
-                    <input required name="lastName" id="lastName" type="text" className="w-full px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-background" placeholder="Doe" />
+                    <input required name="lastName" id="lastName" type="text" className="w-full px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-background text-base" placeholder="Doe" />
                   </div>
                 </div>
                 
                 <div className="space-y-2">
                   <label htmlFor="email" className="text-sm font-medium">Email</label>
-                  <input required name="email" id="email" type="email" className="w-full px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-background" placeholder="john@example.com" />
+                  <input required name="email" id="email" type="email" className="w-full px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-background text-base" placeholder="john@example.com" />
                 </div>
 
                 <div className="space-y-2">
                   <label htmlFor="subject" className="text-sm font-medium">Subject</label>
-                  <select name="subject" id="subject" className="w-full px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-background">
+                  <select name="subject" id="subject" className="w-full px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-background text-base">
                     <option>General Inquiry</option>
                     <option>Partnership</option>
                     <option>Careers</option>
@@ -146,7 +146,7 @@ export default function Contact() {
 
                 <div className="space-y-2">
                   <label htmlFor="message" className="text-sm font-medium">Message</label>
-                  <textarea required name="message" id="message" rows={5} className="w-full px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-background resize-none" placeholder="How can we help you?"></textarea>
+                  <textarea required name="message" id="message" rows={5} className="w-full px-4 py-3 rounded-lg border border-border focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-background text-base resize-none" placeholder="How can we help you?"></textarea>
                 </div>
 
                 <button 

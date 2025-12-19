@@ -4,7 +4,7 @@ import { Pill, Mail, MapPin, Phone, Linkedin, Twitter, Facebook } from "lucide-r
 export function Footer() {
   return (
     <footer className="bg-muted text-muted-foreground border-t border-border">
-      <div className="container mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
         
         {/* Brand Column */}
         <div className="space-y-4">
@@ -69,7 +69,7 @@ export function Footer() {
       </div>
       
       <div className="border-t border-border/50">
-        <div className="container mx-auto px-6 py-6 flex flex-col md:flex-row justify-between items-center text-sm">
+        <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 flex flex-col md:flex-row justify-between items-center text-sm gap-2">
           <p>&copy; {new Date().getFullYear()} PharmaCorp. All rights reserved.</p>
           <div className="flex gap-6 mt-4 md:mt-0">
             <Link href="#" className="hover:text-primary transition-colors">Privacy Policy</Link>

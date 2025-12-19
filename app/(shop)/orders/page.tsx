@@ -45,19 +45,19 @@ export default async function OrdersPage() {
   }
 
   return (
-    <div className="container px-6 py-12 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">My Orders</h1>
+    <div className="container px-4 sm:px-6 py-8 sm:py-12 max-w-4xl mx-auto">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">My Orders</h1>
 
       <div className="space-y-4">
         {orders.map((order) => (
           <Link
             key={order.id}
             href={`/orders/${order.id}`}
-            className="block bg-card border border-border rounded-2xl p-6 hover:shadow-lg transition-shadow group"
+            className="block bg-card border border-border rounded-2xl p-4 sm:p-6 hover:shadow-lg transition-shadow group"
           >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
               <div>
-                <p className="font-bold text-lg">{order.orderNumber}</p>
+                <p className="font-bold text-base sm:text-lg">{order.orderNumber}</p>
                 <p className="text-sm text-muted-foreground">
                   {new Date(order.createdAt).toLocaleDateString("en-IN", {
                     day: "numeric",
@@ -67,10 +67,10 @@ export default async function OrdersPage() {
                 </p>
               </div>
               <div className="flex items-center gap-3">
-                <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusColors[order.status]}`}>
+                <span className={`px-2.5 py-1 rounded-full text-xs sm:text-sm font-medium ${statusColors[order.status]}`}>
                   {order.status}
                 </span>
-                <span className="font-bold text-lg">₹{order.total.toFixed(2)}</span>
+                <span className="font-bold text-base sm:text-lg">${order.total.toFixed(2)}</span>
               </div>
             </div>
 
@@ -79,17 +79,17 @@ export default async function OrdersPage() {
                 {order.items?.slice(0, 3).map((item, idx) => (
                   <div
                     key={idx}
-                    className="w-10 h-10 rounded-lg bg-muted border-2 border-background flex items-center justify-center overflow-hidden"
+                    className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-muted border-2 border-background flex items-center justify-center overflow-hidden"
                   >
                     {item.productImage ? (
                       <img src={item.productImage} alt="" className="w-full h-full object-cover" />
                     ) : (
-                      <Package className="w-5 h-5 text-muted-foreground" />
+                      <Package className="w-4 h-4 text-muted-foreground" />
                     )}
                   </div>
                 ))}
                 {(order.items?.length || 0) > 3 && (
-                  <div className="w-10 h-10 rounded-lg bg-muted border-2 border-background flex items-center justify-center text-sm font-medium">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-muted border-2 border-background flex items-center justify-center text-xs sm:text-sm font-medium">
                     +{(order.items?.length || 0) - 3}
                   </div>
                 )}

@@ -203,56 +203,62 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="container px-6 py-12 max-w-4xl mx-auto">
-      <Link href="/cart" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8">
+    <div className="container px-4 sm:px-6 py-8 sm:py-12 max-w-4xl mx-auto">
+      <Link href="/cart" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 sm:mb-8 text-sm sm:text-base">
         <ArrowLeft className="w-4 h-4" /> Back to Cart
       </Link>
 
-      <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+      <h1 className="text-2xl sm:text-3xl font-bold mb-8">Checkout</h1>
 
       {/* Progress Steps */}
-      <div className="flex items-center justify-between mb-12">
-        {STEPS.map((s, idx) => (
-          <div key={s.id} className="flex items-center">
-            <div 
-              className={`flex items-center gap-2 ${
-                step >= s.id ? "text-primary" : "text-muted-foreground"
-              }`}
-            >
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 ${
-                step > s.id 
-                  ? "bg-primary border-primary text-white"
-                  : step === s.id 
-                    ? "border-primary text-primary"
-                    : "border-muted-foreground"
-              }`}>
-                {step > s.id ? (
-                  <CheckCircle className="w-5 h-5" />
-                ) : (
-                  <s.icon className="w-5 h-5" />
-                )}
+      <div className="relative mb-8 sm:mb-12">
+        <div className="flex items-center justify-between">
+          {STEPS.map((s, idx) => (
+            <div key={s.id} className="flex items-center relative z-10">
+              <div 
+                className={`flex flex-col sm:flex-row items-center gap-2 ${
+                  step >= s.id ? "text-primary" : "text-muted-foreground"
+                }`}
+              >
+                <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border-2 transition-colors duration-300 ${
+                  step > s.id 
+                    ? "bg-primary border-primary text-white"
+                    : step === s.id 
+                      ? "border-primary text-primary bg-background"
+                      : "border-muted-foreground bg-background"
+                }`}>
+                  {step > s.id ? (
+                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+                  ) : (
+                    <s.icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                  )}
+                </div>
+                <span className="text-xs sm:text-base font-medium mt-1 sm:mt-0">{s.name}</span>
               </div>
-              <span className="hidden sm:inline font-medium">{s.name}</span>
             </div>
-            {idx < STEPS.length - 1 && (
-              <div className={`w-16 sm:w-24 h-0.5 mx-2 sm:mx-4 ${
-                step > s.id ? "bg-primary" : "bg-muted"
-              }`} />
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
+        
+        {/* Connector Lines Background */}
+        <div className="absolute top-4 sm:top-5 left-0 w-full h-0.5 bg-muted -z-0" />
+        
+        {/* Active Connector Line */}
+        <div 
+          className="absolute top-4 sm:top-5 left-0 h-0.5 bg-primary -z-0 transition-all duration-300" 
+          style={{ width: `${((step - 1) / (STEPS.length - 1)) * 100}%` }}
+        />
       </div>
 
       {/* Error Message */}
       {error && (
-        <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-xl">
+        <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-xl text-sm sm:text-base">
           {error}
         </div>
       )}
 
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Main Content */}
-        <div className="lg:col-span-2">
+        <div className="order-2 lg:order-1 lg:col-span-2">
           <AnimatePresence mode="wait">
             {/* Step 1: Review Order */}
             {step === 1 && (
@@ -261,26 +267,26 @@ export default function CheckoutPage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="bg-card border border-border rounded-2xl p-6"
+                className="bg-card border border-border rounded-2xl p-4 sm:p-6"
               >
                 <h2 className="text-xl font-bold mb-4">Review Your Order</h2>
                 <div className="space-y-4">
                   {products.map(product => {
                     const qty = getProductQuantity(product.id)
                     return (
-                      <div key={product.id} className="flex gap-4 py-3 border-b border-border last:border-0">
-                        <div className="w-16 h-16 bg-muted rounded-lg flex items-center justify-center overflow-hidden">
+                      <div key={product.id} className="flex gap-3 sm:gap-4 py-3 border-b border-border last:border-0">
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-muted rounded-lg flex items-center justify-center overflow-hidden shrink-0">
                           {product.image ? (
                             <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                           ) : (
                             <span className="text-2xl">💊</span>
                           )}
                         </div>
-                        <div className="flex-grow">
-                          <h3 className="font-medium">{product.name}</h3>
+                        <div className="flex-grow min-w-0">
+                          <h3 className="font-medium text-sm sm:text-base truncate">{product.name}</h3>
                           <p className="text-sm text-muted-foreground">Qty: {qty}</p>
                         </div>
-                        <p className="font-bold">₹{(product.price * qty).toFixed(2)}</p>
+                        <p className="font-bold text-sm sm:text-base">${(product.price * qty).toFixed(2)}</p>
                       </div>
                     )
                   })}
@@ -295,10 +301,10 @@ export default function CheckoutPage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="bg-card border border-border rounded-2xl p-6"
+                className="bg-card border border-border rounded-2xl p-4 sm:p-6"
               >
                 <h2 className="text-xl font-bold mb-4">Shipping Details</h2>
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="sm:col-span-2">
                     <label className="block text-sm font-medium mb-1">Full Name *</label>
                     <input
@@ -306,7 +312,7 @@ export default function CheckoutPage() {
                       name="name"
                       value={shipping.name}
                       onChange={handleShippingChange}
-                      className="w-full px-4 py-3 border border-border rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full px-4 py-3 border border-border rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary text-base"
                       placeholder="Enter your full name"
                     />
                   </div>
@@ -317,7 +323,7 @@ export default function CheckoutPage() {
                       name="email"
                       value={shipping.email}
                       onChange={handleShippingChange}
-                      className="w-full px-4 py-3 border border-border rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full px-4 py-3 border border-border rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary text-base"
                       placeholder="your@email.com"
                     />
                   </div>
@@ -328,7 +334,7 @@ export default function CheckoutPage() {
                       name="phone"
                       value={shipping.phone}
                       onChange={handleShippingChange}
-                      className="w-full px-4 py-3 border border-border rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full px-4 py-3 border border-border rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary text-base"
                       placeholder="10-digit mobile number"
                     />
                   </div>
@@ -339,7 +345,7 @@ export default function CheckoutPage() {
                       name="address"
                       value={shipping.address}
                       onChange={handleShippingChange}
-                      className="w-full px-4 py-3 border border-border rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full px-4 py-3 border border-border rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary text-base"
                       placeholder="Street address, apartment, etc."
                     />
                   </div>
@@ -350,7 +356,7 @@ export default function CheckoutPage() {
                       name="city"
                       value={shipping.city}
                       onChange={handleShippingChange}
-                      className="w-full px-4 py-3 border border-border rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full px-4 py-3 border border-border rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary text-base"
                       placeholder="City"
                     />
                   </div>
@@ -361,7 +367,7 @@ export default function CheckoutPage() {
                       name="state"
                       value={shipping.state}
                       onChange={handleShippingChange}
-                      className="w-full px-4 py-3 border border-border rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full px-4 py-3 border border-border rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary text-base"
                       placeholder="State"
                     />
                   </div>
@@ -372,7 +378,7 @@ export default function CheckoutPage() {
                       name="zip"
                       value={shipping.zip}
                       onChange={handleShippingChange}
-                      className="w-full px-4 py-3 border border-border rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-full px-4 py-3 border border-border rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary text-base"
                       placeholder="6-digit PIN code"
                     />
                   </div>
@@ -383,7 +389,7 @@ export default function CheckoutPage() {
                       value={shipping.notes}
                       onChange={handleShippingChange}
                       rows={3}
-                      className="w-full px-4 py-3 border border-border rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                      className="w-full px-4 py-3 border border-border rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-primary resize-none text-base"
                       placeholder="Any special instructions for delivery..."
                     />
                   </div>
@@ -398,13 +404,13 @@ export default function CheckoutPage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="bg-card border border-border rounded-2xl p-6"
+                className="bg-card border border-border rounded-2xl p-4 sm:p-6"
               >
                 <h2 className="text-xl font-bold mb-4">Payment Method</h2>
-                <div className="p-4 border-2 border-primary rounded-xl bg-primary/5">
+                <div className="p-4 border-2 border-primary rounded-xl bg-primary/5 cursor-pointer">
                   <div className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center">
-                      <div className="w-2.5 h-2.5 rounded-full bg-primary" />
+                    <div className="w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center bg-primary">
+                      <div className="w-2 h-2 rounded-full bg-white" />
                     </div>
                     <div>
                       <p className="font-bold">Cash on Delivery (COD)</p>
@@ -414,19 +420,20 @@ export default function CheckoutPage() {
                 </div>
                 
                 <div className="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl">
-                  <p className="text-sm text-amber-700 dark:text-amber-400">
-                    💡 Online payment options coming soon! For now, please pay cash on delivery.
+                  <p className="text-sm text-amber-700 dark:text-amber-400 flex gap-2">
+                    <span className="text-lg">💡</span>
+                    <span>Online payment options coming soon! For now, please pay cash on delivery.</span>
                   </p>
                 </div>
 
                 <div className="mt-6 pt-6 border-t border-border">
                   <h3 className="font-bold mb-3">Shipping to:</h3>
-                  <p className="text-muted-foreground">
-                    {shipping.name}<br />
-                    {shipping.address}<br />
-                    {shipping.city}, {shipping.state} - {shipping.zip}<br />
-                    Phone: {shipping.phone}
-                  </p>
+                  <div className="text-sm text-muted-foreground bg-muted/50 p-4 rounded-xl">
+                    <p className="font-medium text-foreground mb-1">{shipping.name}</p>
+                    <p>{shipping.address}</p>
+                    <p>{shipping.city}, {shipping.state} - {shipping.zip}</p>
+                    <p className="mt-2">Phone: {shipping.phone}</p>
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -437,7 +444,7 @@ export default function CheckoutPage() {
             <button
               onClick={handlePrevStep}
               disabled={step === 1}
-              className="flex items-center gap-2 px-6 py-3 border border-border rounded-xl hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-4 sm:px-6 py-3 border border-border rounded-xl hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
             >
               <ArrowLeft className="w-4 h-4" /> Back
             </button>
@@ -445,7 +452,7 @@ export default function CheckoutPage() {
             {step < 3 ? (
               <button
                 onClick={handleNextStep}
-                className="flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary/90 transition-colors"
+                className="flex items-center gap-2 px-6 sm:px-8 py-3 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary/90 transition-colors text-sm sm:text-base shadow-lg shadow-primary/20"
               >
                 Continue <ArrowRight className="w-4 h-4" />
               </button>
@@ -453,7 +460,7 @@ export default function CheckoutPage() {
               <button
                 onClick={handlePlaceOrder}
                 disabled={submitting}
-                className="flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-xl font-bold hover:bg-primary/90 transition-colors disabled:opacity-70"
+                className="flex items-center gap-2 px-6 sm:px-8 py-3 bg-primary text-primary-foreground rounded-xl font-bold hover:bg-primary/90 transition-colors disabled:opacity-70 text-sm sm:text-base shadow-lg shadow-primary/20"
               >
                 {submitting ? (
                   <>
@@ -468,17 +475,19 @@ export default function CheckoutPage() {
         </div>
 
         {/* Order Summary Sidebar */}
-        <div className="lg:col-span-1">
-          <div className="bg-card border border-border rounded-2xl p-6 sticky top-24">
-            <h2 className="text-lg font-bold mb-4">Order Summary</h2>
+        <div className="order-1 lg:order-2 lg:col-span-1">
+          <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 sticky top-24">
+            <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+              <Package className="w-5 h-5 text-primary" /> Order Summary
+            </h2>
             
-            <div className="space-y-3 mb-6 text-sm">
+            <div className="space-y-3 mb-6 text-sm max-h-60 overflow-y-auto pr-2 custom-scrollbar">
               {products.map(product => (
-                <div key={product.id} className="flex justify-between">
-                  <span className="text-muted-foreground truncate max-w-[60%]">
-                    {product.name} × {getProductQuantity(product.id)}
+                <div key={product.id} className="flex justify-between gap-2">
+                  <span className="text-muted-foreground truncate max-w-[60%]" title={product.name}>
+                    {product.name} <span className="text-xs text-foreground">× {getProductQuantity(product.id)}</span>
                   </span>
-                  <span>₹{(product.price * getProductQuantity(product.id)).toFixed(2)}</span>
+                  <span className="font-medium">${(product.price * getProductQuantity(product.id)).toFixed(2)}</span>
                 </div>
               ))}
             </div>
@@ -486,15 +495,15 @@ export default function CheckoutPage() {
             <div className="border-t border-border pt-4 space-y-2">
               <div className="flex justify-between text-muted-foreground">
                 <span>Subtotal</span>
-                <span>₹{subtotal.toFixed(2)}</span>
+                <span>${subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-muted-foreground">
                 <span>Shipping</span>
-                <span className="text-emerald-600">Free</span>
+                <span className="text-emerald-600 font-medium">Free</span>
               </div>
-              <div className="flex justify-between font-bold text-lg pt-2 border-t border-border">
+              <div className="flex justify-between font-bold text-lg pt-2 border-t border-border mt-2">
                 <span>Total</span>
-                <span className="text-primary">₹{subtotal.toFixed(2)}</span>
+                <span className="text-primary">${subtotal.toFixed(2)}</span>
               </div>
             </div>
           </div>

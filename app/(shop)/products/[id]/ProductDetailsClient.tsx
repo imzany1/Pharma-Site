@@ -45,7 +45,7 @@ export function ProductDetailsClient({ product }: { product: Product }) {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">{product.name}</h1>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">{product.name}</h1>
         <div className="flex items-center gap-4">
           <span className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm font-medium text-gray-700 dark:text-gray-300">
             {product.category}
@@ -121,7 +121,7 @@ export function ProductDetailsClient({ product }: { product: Product }) {
       </button>
 
       {/* Additional Info Cards */}
-      <div className="grid grid-cols-2 gap-4 pt-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
         <div className="p-4 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-800">
           <h4 className="font-semibold mb-1 text-gray-900 dark:text-white">Secure Delivery</h4>
           <p className="text-sm text-gray-500 dark:text-gray-400">Fast shipping worldwide</p>

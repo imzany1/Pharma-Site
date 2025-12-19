@@ -25,7 +25,7 @@ export default async function AdminOrdersPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6">
           <div className="flex items-center gap-4">
             <div className="bg-blue-500 p-3 rounded-xl text-white">
@@ -55,7 +55,7 @@ export default async function AdminOrdersPage() {
             </div>
             <div>
               <p className="text-sm text-gray-500 dark:text-gray-400">Today&apos;s Revenue</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">₹{stats.todayRevenue.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">${stats.todayRevenue.toFixed(2)}</p>
             </div>
           </div>
         </div>
@@ -66,7 +66,7 @@ export default async function AdminOrdersPage() {
             </div>
             <div>
               <p className="text-sm text-gray-500 dark:text-gray-400">Total Revenue</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">₹{stats.totalRevenue.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">${stats.totalRevenue.toFixed(2)}</p>
             </div>
           </div>
         </div>
@@ -81,7 +81,7 @@ export default async function AdminOrdersPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full whitespace-nowrap">
               <thead className="bg-gray-50 dark:bg-gray-800">
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400">Order</th>
@@ -116,7 +116,7 @@ export default async function AdminOrdersPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 font-bold text-gray-900 dark:text-white">
-                      ₹{order.total.toFixed(2)}
+                      ${order.total.toFixed(2)}
                     </td>
                     <td className="px-6 py-4">
                       <Link 

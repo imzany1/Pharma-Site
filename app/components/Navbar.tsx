@@ -99,9 +99,9 @@ export function Navbar() {
               >
                 My Orders
               </Link>
-              <div className="flex items-center gap-2 px-3 py-2 bg-muted rounded-full">
-                <User className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm font-medium">{session.user.name || session.user.email?.split("@")[0]}</span>
+              <div className="flex items-center gap-2 px-3 py-2 bg-muted rounded-full max-w-[150px]">
+                <User className="w-4 h-4 text-muted-foreground shrink-0" />
+                <span className="text-sm font-medium truncate">{session.user.name || session.user.email?.split("@")[0]}</span>
               </div>
               <button
                 onClick={handleSignOut}
