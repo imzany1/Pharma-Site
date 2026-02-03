@@ -2,6 +2,9 @@ import { getAllProducts } from "@/lib/products"
 import { ProductsGrid } from "./ProductsGrid"
 
 // Make this page dynamic to avoid build-time database requirement
+// This allows the application to build without DATABASE_URL configured
+// Trade-off: Each request will fetch fresh data from the database (no caching)
+// For better performance with caching, configure DATABASE_URL at build time and use ISR
 export const dynamic = 'force-dynamic'
 
 export default async function ProductsPage() {

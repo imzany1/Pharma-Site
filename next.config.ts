@@ -4,6 +4,8 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   images: {
     remotePatterns: [
+      // Security: Only allow HTTPS from trusted domains
+      // All image sources must support HTTPS
       {
         protocol: "https",
         hostname: "images.unsplash.com",
