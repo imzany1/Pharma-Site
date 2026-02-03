@@ -1,9 +1,6 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-// Helper to ensure Resend API key is available
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(req: Request) {
   try {
     const { firstName, lastName, email, subject, message } = await req.json();
@@ -15,6 +12,9 @@ export async function POST(req: Request) {
         { status: 500 }
       );
     }
+
+    // Initialize Resend only when API key is available
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     const data = await resend.emails.send({
       from: 'PharmaCorp Contact <onboarding@resend.dev>', // Default Resend testing domain
