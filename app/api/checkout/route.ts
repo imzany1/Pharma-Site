@@ -3,8 +3,6 @@ import { auth } from "@/lib/auth"
 import { orderRepository, CreateOrderItemData } from "@/lib/repositories"
 import { Resend } from "resend"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 interface CheckoutRequest {
   items: CreateOrderItemData[]
   shipping: {
@@ -91,6 +89,9 @@ async function sendOrderEmails(
     console.warn("RESEND_API_KEY not configured, skipping email")
     return
   }
+
+  // Initialize Resend only when API key is available
+  const resend = new Resend(process.env.RESEND_API_KEY)
 
   const itemsHtml = order.items?.map(item => `
     <tr>

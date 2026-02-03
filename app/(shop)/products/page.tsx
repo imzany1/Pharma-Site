@@ -1,7 +1,8 @@
 import { getAllProducts } from "@/lib/products"
 import { ProductsGrid } from "./ProductsGrid"
-// Enable ISR: Revalidate this page every hour
-export const revalidate = 3600
+
+// Make this page dynamic to avoid build-time database requirement
+export const dynamic = 'force-dynamic'
 
 export default async function ProductsPage() {
   const products = await getAllProducts()
